@@ -1,5 +1,5 @@
 <template>
-    <div ref="wrapper" class="list-wrapper" :style={"height": height+'px'}>
+    <div ref="wrapper" class="list-wrapper">
         <div class="scroll-content">
             <slot></slot>
             <div>
@@ -9,7 +9,6 @@
 	           <Loading class="pullDown" v-show="inPullDown" :loadingWord='PullingDownWord'></Loading>
 	        </transition>
         </div>
-        
     </div>
 </template>
 
@@ -62,6 +61,9 @@
         }
     },
     mounted() {
+        let w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        let h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        this.$refs.wrapper.style.height = h + 'px';
         setTimeout(()=>{
             this.initScroll();
 
@@ -139,9 +141,11 @@
    .list-wrapper{
     height: 300px;
     background: #fff;
-    
+    overflow: hidden;
+    .scroll-content{
+        padding-bottom: 30px;
+    }
   }
-    
     .list-content{
       position: relative;
       z-index: 10;
@@ -154,7 +158,6 @@
         padding-left: 20px;
         border-bottom: 1px solid #e5e5e5;
       }
-        
   .pulldown-wrapper{
     position: absolute;
     width: 100%;
@@ -164,8 +167,6 @@
     align-items: center;
     transition: all;
   }
-    
-   
   .pullup-wrapper{
     width: 100%;
     display: flex;
@@ -180,16 +181,11 @@
     top:0;
     left:0;
 }
-
     .pullDown-enter-active{
         transition:all 0.2s;
     }
-
     .pullDown-enter, .pullDown-leave-active{
         transform:translateY(-100%);
         transition:all 0.2s;
     }
-
- 
-    
 </style>
