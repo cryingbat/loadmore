@@ -1,10 +1,8 @@
-﻿<template>
+<template>
   <section>
-  <Loading id="saerchingLoading" v-show="inSearching"></Loading>
    <Scroller
         id="scroll"
         ref="scroll"
-        :height="500"
         :dataList="filmList"
         :pullDownRefresh="DOWN_CONFIG"
         :pullUpLoad="UP_CONFIG"
@@ -22,6 +20,7 @@
                     </div>
                 </router-link>
           </ul>
+          <Loading id="saerchingLoading" v-show="inSearching"></Loading>
       </Scroller>
   </section>
 </template>
@@ -68,7 +67,6 @@ export default {
           //这里处理上拉刷新完之后的逻辑
           var l=this.filmList.length;
              var random=Math.floor(Math.random()*l);
-          
           // console.log(this.filmList[random]);
              this.filmList.unshift(this.filmList[random]);
         },2000)
@@ -85,15 +83,18 @@ export default {
           return name
       },
       loadmore() {
-        axios.get('/url', {
+        axios.get('/181-1', {
             params: {
               //参数
-              
+              showapi_appid:30603,
+              showapi_sign:'98960666afeb4992ae91971d13494090',
+              page:++this.page,
+              num:8
             }
           })
           .then((res)=>{
             //数据处理
-              res=res.data;
+              res=res.data.showapi_res_body.newslist;
               if(res.length>0){
                  this.scrollElement.PullingUpWord="加载完成";
                  setTimeout(()=>{
@@ -105,18 +106,20 @@ export default {
               }
               this.inSearching=false;
           })
-          
       },
       fetchData(){
-          axios.get('/url', {
+          axios.get('/181-1', {
             params: {
               //参数
-              
+              showapi_appid:30603,
+              showapi_sign:'98960666afeb4992ae91971d13494090',
+              page:this.page,
+              num:8
             }
           })
           .then((res)=>{
-            res = res.data;
-              
+            console.log(res.data.showapi_res_body.newslist)
+            res = res.data.showapi_res_body.newslist;
               if(res.length>0){
                   this.filmList = res;
               }else{
@@ -130,8 +133,6 @@ export default {
 </script>
 <style lang='less' scoped>
   #scroll{
-        top:1.11rem;
-        bottom:1.11rem;
         .item{
           list-style:none;
         }
